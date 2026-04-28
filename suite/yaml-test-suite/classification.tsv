@@ -2,11 +2,410 @@
 # Columns: case-id<TAB>status<TAB>reason
 # status is one of: pass, expectedFail, unsupported
 #
-# The suite harness starts with no mandatory cases until the parser production
-# rewrite begins importing upstream cases. CI still fetches the upstream suite
-# so changes to the harness and classification format are exercised.
-229Q	pass	current parser accepts nested block sequences/mappings
-27NA	pass	current parser accepts YAML directive and explicit start on one line as a scalar document
-2AUY	pass	current parser accepts basic tagged sequence entries
-2JQS	pass	current parser accepts repeated empty mapping keys in the supported subset
-33X3	pass	current parser accepts explicitly tagged integers in a block sequence
+# Every pinned upstream YAML Test Suite case with an in.yaml fixture must be
+# classified. Cases marked pass are enforced against the currently available
+# expectations: parse success/failure, test.event, and in.json. Cases marked
+# expectedFail are YAML 1.2.2 compliance gaps that must fail at least one
+# enforced check until fixed.
+229Q	pass	Spec Example 2.4. Sequence of Mappings 
+236B	pass	invalid YAML rejected: Invalid value after mapping 
+26DV	expectedFail	parser mismatch: Whitespace around colon in mappings 
+27NA	pass	Spec Example 5.9. Directive Indicator 
+2AUY	pass	Tags in Block Sequence 
+2CMS	pass	invalid YAML rejected: Invalid mapping in plain multiline 
+2EBW	expectedFail	parser mismatch: Allowed characters in keys 
+2G84/00	expectedFail	invalid YAML currently accepted: Literal modifers 
+2G84/01	expectedFail	invalid YAML currently accepted: Literal modifers 
+2G84/02	expectedFail	events mismatch: Literal modifers 
+2G84/03	expectedFail	events mismatch: Literal modifers 
+2JQS	pass	Block Mapping with Missing Keys 
+2LFX	expectedFail	events mismatch: Spec Example 6.13. Reserved Directives [1.3] 
+2SXE	expectedFail	parser mismatch: Anchors With Colon in Name 
+2XXW	expectedFail	parser mismatch: Spec Example 2.25. Unordered Sets 
+33X3	pass	Three explicit integers in a block sequence 
+35KP	expectedFail	parser mismatch: Tags for Root Objects 
+36F6	expectedFail	parser mismatch: Multiline plain scalar with empty line 
+3ALJ	expectedFail	parser mismatch: Block Sequence in Block Sequence 
+3GZX	expectedFail	events mismatch: Spec Example 7.1. Alias Nodes 
+3HFZ	pass	invalid YAML rejected: Invalid content after document end marker 
+3MYT	expectedFail	events mismatch: Plain Scalar looking like key, comment, anchor and tag 
+3R3P	expectedFail	parser mismatch: Single block sequence with anchor 
+3RLN/00	expectedFail	parser mismatch: Leading tabs in double quoted 
+3RLN/01	expectedFail	parser mismatch: Leading tabs in double quoted 
+3RLN/02	expectedFail	parser mismatch: Leading tabs in double quoted 
+3RLN/03	expectedFail	parser mismatch: Leading tabs in double quoted 
+3RLN/04	expectedFail	parser mismatch: Leading tabs in double quoted 
+3RLN/05	expectedFail	parser mismatch: Leading tabs in double quoted 
+3UYS	expectedFail	events mismatch: Escaped slash in double quotes 
+4ABK	expectedFail	parser mismatch: Flow Mapping Separate Values 
+4CQQ	expectedFail	parser mismatch: Spec Example 2.18. Multi-line Flow Scalars 
+4EJS	pass	invalid YAML rejected: Invalid tabs as indendation in a mapping 
+4FJ6	expectedFail	parser mismatch: Nested implicit complex keys 
+4GC6	expectedFail	events mismatch: Spec Example 7.7. Single Quoted Characters 
+4H7K	pass	invalid YAML rejected: Flow sequence with invalid extra closing bracket 
+4HVU	pass	invalid YAML rejected: Wrong indendation in Sequence 
+4JVG	pass	invalid YAML rejected: Scalar value with two anchors 
+4MUZ/00	expectedFail	parser mismatch: Flow mapping colon on line after key 
+4MUZ/01	expectedFail	parser mismatch: Flow mapping colon on line after key 
+4MUZ/02	expectedFail	parser mismatch: Flow mapping colon on line after key 
+4Q9F	expectedFail	events mismatch: Folded Block Scalar [1.3] 
+4QFQ	expectedFail	events mismatch: Spec Example 8.2. Block Indentation Indicator [1.3] 
+4RWC	expectedFail	events mismatch: Trailing spaces after flow collection 
+4UYU	expectedFail	events mismatch: Colon in Double Quoted String 
+4V8U	expectedFail	events mismatch: Plain scalar with backslashes 
+4WA9	expectedFail	parser mismatch: Literal scalars 
+4ZYM	expectedFail	parser mismatch: Spec Example 6.4. Line Prefixes 
+52DL	expectedFail	events mismatch: Explicit Non-Specific Tag [1.3] 
+54T7	expectedFail	parser mismatch: Flow Mapping 
+55WF	pass	invalid YAML rejected: Invalid escape in double quoted string 
+565N	expectedFail	parser mismatch: Construct Binary 
+57H4	expectedFail	parser mismatch: Spec Example 8.22. Block Collection Nodes 
+58MP	expectedFail	parser mismatch: Flow mapping edge cases 
+5BVJ	expectedFail	events mismatch: Spec Example 5.7. Block Scalar Indicators 
+5C5M	expectedFail	events mismatch: Spec Example 7.15. Flow Mappings 
+5GBF	expectedFail	parser mismatch: Spec Example 6.5. Empty Lines 
+5KJE	expectedFail	events mismatch: Spec Example 7.13. Flow Sequence 
+5LLU	expectedFail	invalid YAML currently accepted: Block scalar with wrong indented line after spaces only 
+5MUD	expectedFail	parser mismatch: Colon and adjacent value on next line 
+5NYZ	pass	Spec Example 6.9. Separated Comment 
+5T43	expectedFail	events mismatch: Colon at the beginning of adjacent flow scalar 
+5TRB	pass	invalid YAML rejected: Invalid document-start marker in doublequoted tring 
+5TYM	expectedFail	events mismatch: Spec Example 6.21. Local Tag Prefix 
+5U3A	pass	invalid YAML rejected: Sequence on same Line as Mapping Key 
+5WE3	expectedFail	parser mismatch: Spec Example 8.17. Explicit Block Mapping Entries 
+62EZ	expectedFail	invalid YAML currently accepted: Invalid block mapping key on same line as previous key 
+652Z	expectedFail	parser mismatch: Question mark at start of flow key 
+65WH	pass	Single Entry Block Sequence 
+6BCT	expectedFail	parser mismatch: Spec Example 6.3. Separation Spaces 
+6BFJ	expectedFail	parser mismatch: Mapping, key and flow sequence item anchors 
+6CA3	expectedFail	parser mismatch: Tab indented top flow 
+6CK3	expectedFail	events mismatch: Spec Example 6.26. Tag Shorthands 
+6FWR	expectedFail	events mismatch: Block Scalar Keep 
+6H3V	expectedFail	parser mismatch: Backslashes in singlequotes 
+6HB6	expectedFail	parser mismatch: Spec Example 6.1. Indentation Spaces 
+6JQW	expectedFail	events mismatch: Spec Example 2.13. In literals, newlines are preserved 
+6JTT	pass	invalid YAML rejected: Flow sequence without closing bracket 
+6JWB	expectedFail	parser mismatch: Tags for Block Objects 
+6KGN	expectedFail	events mismatch: Anchor for empty node 
+6LVF	expectedFail	events mismatch: Spec Example 6.13. Reserved Directives 
+6M2F	expectedFail	events mismatch: Aliases in Explicit Block Mapping 
+6PBE	expectedFail	parser mismatch: Zero-indented sequences in explicit mapping keys 
+6S55	pass	invalid YAML rejected: Invalid scalar at the end of sequence 
+6SLA	expectedFail	events mismatch: Allowed characters in quoted mapping key 
+6VJK	expectedFail	events mismatch: Spec Example 2.15. Folded newlines are preserved for "more indented" and blank lines 
+6WLZ	expectedFail	events mismatch: Spec Example 6.18. Primary Tag Handle [1.3] 
+6WPF	expectedFail	parser mismatch: Spec Example 6.8. Flow Folding [1.3] 
+6XDY	expectedFail	json mismatch: Two document start markers 
+6ZKB	expectedFail	json mismatch: Spec Example 9.6. Stream 
+735Y	expectedFail	parser mismatch: Spec Example 8.20. Block Node Types 
+74H7	pass	Tags in Implicit Mapping 
+753E	expectedFail	events mismatch: Block Scalar Strip [1.3] 
+7A4E	expectedFail	parser mismatch: Spec Example 7.6. Double Quoted Lines 
+7BMT	expectedFail	parser mismatch: Node and Mapping Key Anchors [1.3] 
+7BUB	expectedFail	events mismatch: Spec Example 2.10. Node for “Sammy Sosa” appears twice in this document 
+7FWL	expectedFail	parser mismatch: Spec Example 6.24. Verbatim Tags 
+7LBH	pass	invalid YAML rejected: Multiline double quoted implicit keys 
+7MNF	pass	invalid YAML rejected: Missing colon 
+7T8X	expectedFail	events mismatch: Spec Example 8.10. Folded Lines - 8.13. Final Empty Lines 
+7TMG	expectedFail	parser mismatch: Comment in flow sequence before comma 
+7W2P	expectedFail	parser mismatch: Block Mapping with Missing Values 
+7Z25	expectedFail	json mismatch: Bare document after document end marker 
+7ZZ5	expectedFail	parser mismatch: Empty flow collections 
+82AN	expectedFail	parser mismatch: Three dashes and content without space 
+87E4	expectedFail	parser mismatch: Spec Example 7.8. Single Quoted Implicit Keys 
+8CWC	expectedFail	events mismatch: Plain mapping key ending with colon 
+8G76	expectedFail	events mismatch: Spec Example 6.10. Comment Lines 
+8KB6	expectedFail	parser mismatch: Multiline plain flow mapping key without value 
+8MK2	expectedFail	events mismatch: Explicit Non-Specific Tag 
+8QBE	pass	Block Sequence in Block Mapping 
+8UDB	expectedFail	parser mismatch: Spec Example 7.14. Flow Sequence Entries 
+8XDJ	pass	invalid YAML rejected: Comment in plain multiline value 
+8XYN	expectedFail	events mismatch: Anchor with unicode character 
+93JH	expectedFail	parser mismatch: Block Mappings in Block Sequence 
+93WF	expectedFail	events mismatch: Spec Example 6.6. Line Folding [1.3] 
+96L6	expectedFail	parser mismatch: Spec Example 2.14. In the folded scalars, newlines become spaces 
+96NN/00	expectedFail	parser mismatch: Leading tab content in literals 
+96NN/01	expectedFail	parser mismatch: Leading tab content in literals 
+98YD	expectedFail	events mismatch: Spec Example 5.5. Comment Indicator 
+9BXH	expectedFail	parser mismatch: Multiline doublequoted flow mapping key without value 
+9C9N	pass	invalid YAML rejected: Wrong indented flow sequence 
+9CWY	pass	invalid YAML rejected: Invalid scalar at the end of mapping 
+9DXL	expectedFail	json mismatch: Spec Example 9.6. Stream [1.3] 
+9FMG	pass	Multi-level Mapping Indent 
+9HCY	expectedFail	invalid YAML currently accepted: Need document footer before directives 
+9J7A	pass	Simple Mapping Indent 
+9JBA	expectedFail	invalid YAML currently accepted: Invalid comment after end of flow sequence 
+9KAX	expectedFail	parser mismatch: Various combinations of tags and anchors 
+9KBC	pass	invalid YAML rejected: Mapping starting at --- line 
+9MAG	expectedFail	invalid YAML currently accepted: Flow sequence with invalid comma at the beginning 
+9MMA	expectedFail	invalid YAML currently accepted: Directive by itself with no document 
+9MMW	expectedFail	events mismatch: Single Pair Implicit Entries 
+9MQT/00	expectedFail	parser mismatch: Scalar doc with '...' in content 
+9MQT/01	pass	invalid YAML rejected: Scalar doc with '...' in content 
+9SA2	expectedFail	parser mismatch: Multiline double quoted flow mapping key 
+9SHH	expectedFail	events mismatch: Spec Example 5.8. Quoted Scalar Indicators 
+9TFX	expectedFail	parser mismatch: Spec Example 7.6. Double Quoted Lines [1.3] 
+9U5K	expectedFail	parser mismatch: Spec Example 2.12. Compact Nested Mapping 
+9WXW	expectedFail	events mismatch: Spec Example 6.18. Primary Tag Handle 
+9YRD	expectedFail	parser mismatch: Multiline Scalar at Top Level 
+A2M4	expectedFail	parser mismatch: Spec Example 6.2. Indentation Indicators 
+A6F9	expectedFail	events mismatch: Spec Example 8.4. Chomping Final Line Break 
+A984	expectedFail	parser mismatch: Multiline Scalar in Mapping 
+AB8U	expectedFail	parser mismatch: Sequence entry that looks like two with wrong indentation 
+AVM7	expectedFail	events mismatch: Empty Stream 
+AZ63	expectedFail	parser mismatch: Sequence With Same Indentation as Parent Mapping 
+AZW3	expectedFail	parser mismatch: Lookahead test cases 
+B3HG	expectedFail	events mismatch: Spec Example 8.9. Folded Scalar [1.3] 
+B63P	expectedFail	invalid YAML currently accepted: Directive without document 
+BD7L	pass	invalid YAML rejected: Invalid mapping after sequence 
+BEC7	expectedFail	parser mismatch: Spec Example 6.14. “YAML” directive 
+BF9H	pass	invalid YAML rejected: Trailing comment in multiline plain scalar 
+BS4K	pass	invalid YAML rejected: Comment between plain scalar lines 
+BU8L	expectedFail	parser mismatch: Node Anchor and Tag on Seperate Lines 
+C2DT	expectedFail	parser mismatch: Spec Example 7.18. Flow Mapping Adjacent Values 
+C2SP	pass	invalid YAML rejected: Flow Mapping Key on two lines 
+C4HZ	expectedFail	parser mismatch: Spec Example 2.24. Global Tags 
+CC74	expectedFail	events mismatch: Spec Example 6.20. Tag Handles 
+CFD4	expectedFail	events mismatch: Empty implicit key in single pair flow sequences 
+CML9	pass	invalid YAML rejected: Missing comma in flow 
+CN3R	expectedFail	parser mismatch: Various location of anchors in flow sequence 
+CPZ3	expectedFail	events mismatch: Doublequoted scalar starting with a tab 
+CQ3W	pass	invalid YAML rejected: Double quoted string without closing quote 
+CT4Q	expectedFail	parser mismatch: Spec Example 7.20. Single Pair Explicit Entry 
+CTN5	expectedFail	invalid YAML currently accepted: Flow sequence with invalid extra comma 
+CUP7	expectedFail	events mismatch: Spec Example 5.6. Node Property Indicators 
+CVW2	pass	invalid YAML rejected: Invalid comment after comma 
+CXX2	expectedFail	invalid YAML currently accepted: Mapping with anchor on document start line 
+D49Q	pass	invalid YAML rejected: Multiline single quoted implicit keys 
+D83L	expectedFail	events mismatch: Block scalar indicator order 
+D88J	expectedFail	events mismatch: Flow Sequence in Block Mapping 
+D9TU	pass	Single Pair Block Mapping 
+DBG4	expectedFail	parser mismatch: Spec Example 7.10. Plain Characters 
+DC7X	pass	Various trailing tabs 
+DE56/00	expectedFail	parser mismatch: Trailing tabs in double quoted 
+DE56/01	expectedFail	parser mismatch: Trailing tabs in double quoted 
+DE56/02	expectedFail	parser mismatch: Trailing tabs in double quoted 
+DE56/03	expectedFail	parser mismatch: Trailing tabs in double quoted 
+DE56/04	expectedFail	parser mismatch: Trailing tabs in double quoted 
+DE56/05	expectedFail	parser mismatch: Trailing tabs in double quoted 
+DFF7	expectedFail	parser mismatch: Spec Example 7.16. Flow Mapping Entries 
+DHP8	expectedFail	events mismatch: Flow Sequence 
+DK3J	expectedFail	parser mismatch: Zero indented block scalar with line that looks like a comment 
+DK4H	pass	invalid YAML rejected: Implicit key followed by newline 
+DK95/00	expectedFail	parser mismatch: Tabs that look like indentation 
+DK95/01	pass	invalid YAML rejected: Tabs that look like indentation 
+DK95/02	expectedFail	parser mismatch: Tabs that look like indentation 
+DK95/03	expectedFail	parser mismatch: Tabs that look like indentation 
+DK95/04	expectedFail	parser mismatch: Tabs that look like indentation 
+DK95/05	expectedFail	parser mismatch: Tabs that look like indentation 
+DK95/06	pass	invalid YAML rejected: Tabs that look like indentation 
+DK95/07	expectedFail	parser mismatch: Tabs that look like indentation 
+DK95/08	expectedFail	parser mismatch: Tabs that look like indentation 
+DMG6	pass	invalid YAML rejected: Wrong indendation in Map 
+DWX9	expectedFail	events mismatch: Spec Example 8.8. Literal Content 
+E76Z	expectedFail	events mismatch: Aliases in Implicit Block Mapping 
+EB22	expectedFail	invalid YAML currently accepted: Missing document-end marker before directive 
+EHF6	expectedFail	parser mismatch: Tags for Flow Objects 
+EW3V	pass	invalid YAML rejected: Wrong indendation in mapping 
+EX5H	expectedFail	parser mismatch: Multiline Scalar at Top Level [1.3] 
+EXG3	expectedFail	parser mismatch: Three dashes and content without space [1.3] 
+F2C7	expectedFail	events mismatch: Anchors and Tags 
+F3CP	expectedFail	parser mismatch: Nested flow collections on one line 
+F6MC	expectedFail	events mismatch: More indented lines at the beginning of folded block scalars 
+F8F9	expectedFail	events mismatch: Spec Example 8.5. Chomping Trailing Lines 
+FBC9	expectedFail	parser mismatch: Allowed characters in plain scalars 
+FH7J	expectedFail	events mismatch: Tags on Empty Scalars 
+FP8R	expectedFail	parser mismatch: Zero indented block scalar 
+FQ7F	pass	Spec Example 2.1. Sequence of Scalars 
+FRK4	expectedFail	parser mismatch: Spec Example 7.3. Completely Empty Flow Nodes 
+FTA2	expectedFail	parser mismatch: Single block sequence with anchor and explicit document start 
+FUP4	expectedFail	events mismatch: Flow Sequence in Flow Sequence 
+G4RS	expectedFail	events mismatch: Spec Example 2.17. Quoted Scalars 
+G5U8	expectedFail	invalid YAML currently accepted: Plain dashes in flow sequence 
+G7JE	pass	invalid YAML rejected: Multiline implicit keys 
+G992	expectedFail	events mismatch: Spec Example 8.9. Folded Scalar 
+G9HC	pass	invalid YAML rejected: Invalid anchor in zero indented sequence 
+GDY7	pass	invalid YAML rejected: Comment that looks like a mapping key 
+GH63	pass	Mixed Block Mapping (explicit to implicit) 
+GT5M	pass	invalid YAML rejected: Node anchor in sequence 
+H2RW	expectedFail	events mismatch: Blank lines 
+H3Z8	pass	Literal unicode 
+H7J7	pass	invalid YAML rejected: Node anchor not indented 
+H7TQ	pass	invalid YAML rejected: Extra words on %YAML directive 
+HM87/00	expectedFail	parser mismatch: Scalars in flow start with syntax char 
+HM87/01	expectedFail	events mismatch: Scalars in flow start with syntax char 
+HMK4	expectedFail	events mismatch: Spec Example 2.16. Indentation determines scope 
+HMQ5	expectedFail	events mismatch: Spec Example 6.23. Node Properties 
+HRE5	pass	invalid YAML rejected: Double quoted scalar with escaped single quote 
+HS5T	expectedFail	parser mismatch: Spec Example 7.12. Plain Lines 
+HU3P	pass	invalid YAML rejected: Invalid Mapping in plain scalar 
+HWV9	expectedFail	events mismatch: Document-end marker 
+J3BT	expectedFail	parser mismatch: Spec Example 5.12. Tabs and Spaces 
+J5UC	pass	Multiple Pair Block Mapping 
+J7PZ	expectedFail	parser mismatch: Spec Example 2.26. Ordered Mappings 
+J7VC	pass	Empty Lines Between Mapping Elements 
+J9HZ	pass	Spec Example 2.9. Single Document with Two Comments 
+JEF9/00	expectedFail	events mismatch: Trailing whitespace in streams 
+JEF9/01	expectedFail	events mismatch: Trailing whitespace in streams 
+JEF9/02	expectedFail	events mismatch: Trailing whitespace in streams 
+JHB9	expectedFail	json mismatch: Spec Example 2.7. Two Documents in a Stream 
+JKF3	pass	invalid YAML rejected: Multiline unidented double quoted block key 
+JQ4R	expectedFail	events mismatch: Spec Example 8.14. Block Sequence 
+JR7V	expectedFail	events mismatch: Question marks in scalars 
+JS2J	expectedFail	events mismatch: Spec Example 6.29. Node Anchors 
+JTV5	expectedFail	parser mismatch: Block Mapping with Multiline Scalars 
+JY7Z	expectedFail	invalid YAML currently accepted: Trailing content that looks like a mapping 
+K3WX	expectedFail	parser mismatch: Colon and adjacent value after comment on next line 
+K4SU	pass	Multiple Entry Block Sequence 
+K527	expectedFail	events mismatch: Spec Example 6.6. Line Folding 
+K54U	expectedFail	events mismatch: Tab after document header 
+K858	expectedFail	events mismatch: Spec Example 8.6. Empty Scalar Chomping 
+KH5V/00	expectedFail	events mismatch: Inline tabs in double quoted 
+KH5V/01	expectedFail	parser mismatch: Inline tabs in double quoted 
+KH5V/02	expectedFail	events mismatch: Inline tabs in double quoted 
+KK5P	expectedFail	parser mismatch: Various combinations of explicit block mappings 
+KMK3	pass	Block Submapping 
+KS4U	pass	invalid YAML rejected: Invalid item after end of flow sequence 
+KSS4	expectedFail	parser mismatch: Scalars on --- line 
+L24T/00	expectedFail	events mismatch: Trailing line of spaces 
+L24T/01	expectedFail	events mismatch: Trailing line of spaces 
+L383	expectedFail	json mismatch: Two scalar docs with trailing comments 
+L94M	pass	Tags in Explicit Mapping 
+L9U5	expectedFail	parser mismatch: Spec Example 7.11. Plain Implicit Keys 
+LE5A	expectedFail	events mismatch: Spec Example 7.24. Flow Nodes 
+LHL4	expectedFail	invalid YAML currently accepted: Invalid tag 
+LP6E	expectedFail	parser mismatch: Whitespace After Scalars in Flow 
+LQZ7	expectedFail	parser mismatch: Spec Example 7.4. Double Quoted Implicit Keys 
+LX3P	expectedFail	events mismatch: Implicit Flow Mapping Key on one line 
+M29M	expectedFail	events mismatch: Literal Block Scalar 
+M2N8/00	expectedFail	events mismatch: Question mark edge cases 
+M2N8/01	expectedFail	parser mismatch: Question mark edge cases 
+M5C3	expectedFail	parser mismatch: Spec Example 8.21. Block Scalar Nodes 
+M5DY	expectedFail	parser mismatch: Spec Example 2.11. Mapping between Sequences 
+M6YH	expectedFail	events mismatch: Block sequence indentation 
+M7A3	expectedFail	parser mismatch: Spec Example 9.3. Bare Documents 
+M7NX	expectedFail	parser mismatch: Nested flow collections 
+M9B4	expectedFail	parser mismatch: Spec Example 8.7. Literal Scalar 
+MJS9	expectedFail	parser mismatch: Spec Example 6.7. Block Folding 
+MUS6/00	pass	invalid YAML rejected: Directive variants 
+MUS6/01	expectedFail	invalid YAML currently accepted: Directive variants 
+MUS6/02	expectedFail	parser mismatch: Directive variants 
+MUS6/03	expectedFail	parser mismatch: Directive variants 
+MUS6/04	expectedFail	parser mismatch: Directive variants 
+MUS6/05	pass	Directive variants 
+MUS6/06	pass	Directive variants 
+MXS3	expectedFail	events mismatch: Flow Mapping in Block Sequence 
+MYW6	expectedFail	events mismatch: Block Scalar Strip 
+MZX3	expectedFail	events mismatch: Non-Specific Tags on Scalars 
+N4JP	pass	invalid YAML rejected: Bad indentation in mapping 
+N782	expectedFail	invalid YAML currently accepted: Invalid document markers in flow style 
+NAT4	expectedFail	parser mismatch: Various empty or newline only quoted strings 
+NB6Z	expectedFail	parser mismatch: Multiline plain value with tabs on empty lines 
+NHX8	expectedFail	parser mismatch: Empty Lines at End of Document 
+NJ66	expectedFail	parser mismatch: Multiline plain flow mapping key 
+NKF9	expectedFail	parser mismatch: Empty keys in block and flow mapping 
+NP9H	expectedFail	parser mismatch: Spec Example 7.5. Double Quoted Line Breaks 
+P2AD	expectedFail	events mismatch: Spec Example 8.1. Block Scalar Header 
+P2EQ	expectedFail	invalid YAML currently accepted: Invalid sequene item on same line as previous item 
+P76L	expectedFail	events mismatch: Spec Example 6.19. Secondary Tag Handle 
+P94K	pass	Spec Example 6.11. Multi-Line Comments 
+PBJ2	pass	Spec Example 2.3. Mapping Scalars to Sequences 
+PRH3	expectedFail	parser mismatch: Spec Example 7.9. Single Quoted Lines 
+PUW8	expectedFail	json mismatch: Document start on last line 
+PW8X	expectedFail	parser mismatch: Anchors on Empty Scalars 
+Q4CL	expectedFail	invalid YAML currently accepted: Trailing content after quoted value 
+Q5MG	expectedFail	parser mismatch: Tab at beginning of line followed by a flow mapping 
+Q88A	expectedFail	events mismatch: Spec Example 7.23. Flow Content 
+Q8AD	expectedFail	parser mismatch: Spec Example 7.5. Double Quoted Line Breaks [1.3] 
+Q9WF	expectedFail	events mismatch: Spec Example 6.12. Separation Spaces 
+QB6E	pass	invalid YAML rejected: Wrong indented multiline quoted scalar 
+QF4Y	expectedFail	parser mismatch: Spec Example 7.19. Single Pair Flow Mappings 
+QLJ7	pass	invalid YAML rejected: Tag shorthand used in documents but only defined in the first 
+QT73	expectedFail	events mismatch: Comment and document-end marker 
+R4YG	expectedFail	parser mismatch: Spec Example 8.2. Block Indentation Indicator 
+R52L	expectedFail	parser mismatch: Nested flow mapping sequence and mappings 
+RHX7	expectedFail	invalid YAML currently accepted: YAML directive without document end marker 
+RLU9	expectedFail	parser mismatch: Sequence Indent 
+RR7F	pass	Mixed Block Mapping (implicit to explicit) 
+RTP8	expectedFail	parser mismatch: Spec Example 9.2. Document Markers 
+RXY3	pass	invalid YAML rejected: Invalid document-end marker in single quoted string 
+RZP5	expectedFail	parser mismatch: Various Trailing Comments [1.3] 
+RZT7	expectedFail	parser mismatch: Spec Example 2.28. Log File 
+S3PD	expectedFail	parser mismatch: Spec Example 8.18. Implicit Block Mapping Entries 
+S4GJ	expectedFail	invalid YAML currently accepted: Invalid text after block scalar indicator 
+S4JQ	expectedFail	events mismatch: Spec Example 6.28. Non-Specific Tags 
+S4T7	pass	Document with footer 
+S7BG	pass	Colon followed by comma 
+S98Z	expectedFail	invalid YAML currently accepted: Block scalar with more spaces than first content line 
+S9E8	expectedFail	parser mismatch: Spec Example 5.3. Block Structure Indicators 
+SBG9	expectedFail	parser mismatch: Flow Sequence in Flow Mapping 
+SF5V	expectedFail	invalid YAML currently accepted: Duplicate YAML directive 
+SKE5	expectedFail	parser mismatch: Anchor before zero indented sequence 
+SM9W/00	expectedFail	parser mismatch: Single character streams 
+SM9W/01	expectedFail	parser mismatch: Single character streams 
+SR86	expectedFail	invalid YAML currently accepted: Anchor plus Alias 
+SSW6	expectedFail	events mismatch: Spec Example 7.7. Single Quoted Characters [1.3] 
+SU5Z	expectedFail	invalid YAML currently accepted: Comment without whitespace after doublequoted scalar 
+SU74	expectedFail	invalid YAML currently accepted: Anchor and alias as mapping key 
+SY6V	expectedFail	invalid YAML currently accepted: Anchor before sequence entry on same line 
+SYW4	pass	Spec Example 2.2. Mapping Scalars to Scalars 
+T26H	expectedFail	events mismatch: Spec Example 8.8. Literal Content [1.3] 
+T4YY	expectedFail	parser mismatch: Spec Example 7.9. Single Quoted Lines [1.3] 
+T5N4	expectedFail	parser mismatch: Spec Example 8.7. Literal Scalar [1.3] 
+T833	pass	invalid YAML rejected: Flow mapping missing a separating comma 
+TD5N	pass	invalid YAML rejected: Invalid scalar after sequence 
+TE2A	pass	Spec Example 8.16. Block Mappings 
+TL85	expectedFail	parser mismatch: Spec Example 6.8. Flow Folding 
+TS54	expectedFail	events mismatch: Folded Block Scalar 
+U3C3	expectedFail	events mismatch: Spec Example 6.16. “TAG” directive 
+U3XV	expectedFail	parser mismatch: Node and Mapping Key Anchors 
+U44R	pass	invalid YAML rejected: Bad indentation in mapping (2) 
+U99R	expectedFail	invalid YAML currently accepted: Invalid comma in tag 
+U9NS	expectedFail	json mismatch: Spec Example 2.8. Play by Play Feed from a Game 
+UDM2	expectedFail	events mismatch: Plain URL in flow mapping 
+UDR7	expectedFail	events mismatch: Spec Example 5.4. Flow Collection Indicators 
+UGM3	expectedFail	parser mismatch: Spec Example 2.27. Invoice 
+UKK6/00	expectedFail	events mismatch: Syntax character edge cases 
+UKK6/01	expectedFail	events mismatch: Syntax character edge cases 
+UKK6/02	expectedFail	events mismatch: Syntax character edge cases 
+UT92	expectedFail	parser mismatch: Spec Example 9.4. Explicit Documents 
+UV7Q	expectedFail	parser mismatch: Legal tab after indentation 
+V55R	expectedFail	events mismatch: Aliases in Block Sequence 
+V9D5	expectedFail	parser mismatch: Spec Example 8.19. Compact Block Mappings 
+VJP3/00	pass	invalid YAML rejected: Flow collections over many lines 
+VJP3/01	expectedFail	parser mismatch: Flow collections over many lines 
+W42U	expectedFail	parser mismatch: Spec Example 8.15. Block Sequence Entry Types 
+W4TN	expectedFail	events mismatch: Spec Example 9.5. Directives Documents 
+W5VH	expectedFail	parser mismatch: Allowed characters in alias 
+W9L4	expectedFail	invalid YAML currently accepted: Literal block scalar with more spaces in first line 
+WZ62	expectedFail	parser mismatch: Spec Example 7.2. Empty Content 
+X38W	expectedFail	parser mismatch: Aliases in Flow Objects 
+X4QW	expectedFail	invalid YAML currently accepted: Comment without whitespace after block scalar indicator 
+X8DW	pass	Explicit key and value seperated by comment 
+XLQ9	expectedFail	events mismatch: Multiline scalar that looks like a YAML directive 
+XV9V	expectedFail	parser mismatch: Spec Example 6.5. Empty Lines [1.3] 
+XW4D	expectedFail	parser mismatch: Various Trailing Comments 
+Y2GN	expectedFail	events mismatch: Anchor with colon in the middle 
+Y79Y/000	pass	invalid YAML rejected: Tabs in various contexts 
+Y79Y/001	expectedFail	parser mismatch: Tabs in various contexts 
+Y79Y/002	expectedFail	parser mismatch: Tabs in various contexts 
+Y79Y/003	pass	invalid YAML rejected: Tabs in various contexts 
+Y79Y/004	expectedFail	invalid YAML currently accepted: Tabs in various contexts 
+Y79Y/005	expectedFail	invalid YAML currently accepted: Tabs in various contexts 
+Y79Y/006	expectedFail	invalid YAML currently accepted: Tabs in various contexts 
+Y79Y/007	expectedFail	invalid YAML currently accepted: Tabs in various contexts 
+Y79Y/008	pass	invalid YAML rejected: Tabs in various contexts 
+Y79Y/009	expectedFail	invalid YAML currently accepted: Tabs in various contexts 
+Y79Y/010	expectedFail	events mismatch: Tabs in various contexts 
+YD5X	expectedFail	events mismatch: Spec Example 2.5. Sequence of Sequences 
+YJV2	expectedFail	invalid YAML currently accepted: Dash in flow sequence 
+Z67P	expectedFail	parser mismatch: Spec Example 8.21. Block Scalar Nodes [1.3] 
+Z9M4	expectedFail	events mismatch: Spec Example 6.22. Global Tag Prefix 
+ZCZ6	expectedFail	invalid YAML currently accepted: Invalid mapping in plain single line value 
+ZF4X	expectedFail	parser mismatch: Spec Example 2.6. Mapping of Mappings 
+ZH7C	expectedFail	events mismatch: Anchors in Mapping 
+ZK9H	expectedFail	parser mismatch: Nested top level flow mapping 
+ZL4Z	expectedFail	invalid YAML currently accepted: Invalid nested mapping 
+ZVH3	pass	invalid YAML rejected: Wrong indented sequence item 
+ZWK4	expectedFail	parser mismatch: Key with anchor after missing explicit mapping value 
+ZXT5	pass	invalid YAML rejected: Implicit key followed by newline and adjacent value 

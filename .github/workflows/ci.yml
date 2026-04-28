@@ -27,6 +27,9 @@ jobs:
           printf '%s\n' '---' 'name: lean-yaml' 'enabled: true' 'ports:' '  - 80' '  - 443' > "$tmp"
           lake exe lean-yaml parse "$tmp"
           lake exe lean-yaml value "$tmp"
+          lake exe lean-yaml json "$tmp"
+          lake exe lean-yaml events "$tmp"
+          lake exe lean-yaml suite-events "$tmp"
           lake exe lean-yaml roundtrip "$tmp"
           lake exe lean-yaml emit-value "$tmp"
       - name: YAML Test Suite harness

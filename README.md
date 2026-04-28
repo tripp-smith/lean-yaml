@@ -82,24 +82,24 @@ typechecks, CLI smoke checks, and `bash scripts/yaml-test-suite.sh`:
   These are document-oriented wrappers around current whole-input parsing, not
   true incremental parsers yet.
 - Event lowering from `YamlStream`/`YamlDocument` to low-level `YamlEvent`
-  streams plus a text event emitter for diagnostics and future low-level
-  emission work.
+  streams plus diagnostic and YAML Test Suite event renderers.
 - Parser source-slice, token, and context layer for the planned `lean4-parser`
   production rewrite.
-- CLI commands: `parse`, `value`, `roundtrip`, and `emit-value`.
+- CLI commands: `parse`, `value`, `json`, `events`, `suite-events`,
+  `roundtrip`, and `emit-value`.
 - Structured regression tests under `YamlTest.*` for parser/emitter round trips,
   documents, ByteArray BOM handling, block scalars, flow nesting,
   directive/comment/block-scalar metadata emission, tag handle expansion, simple
   complex keys, schema differences, composer errors, representation graph alias
   expansion, event lowering, serde errors, serde helpers, and streaming helpers.
 - GitHub Actions CI using `leanprover/lean-action`, `lake build`, `lake test`,
-  example typechecks, CLI smoke checks, Reservoir eligibility checks, and the
-  YAML Test Suite harness.
+  example typechecks, CLI smoke checks, and the YAML Test Suite harness.
 - Dependabot configuration for GitHub Actions updates.
 - GitHub community files for contributors: contributing guide, security policy,
   code of conduct, issue templates, and pull request template.
-- YAML Test Suite fetch/classification harness with executable `pass` cases and
-  tracked pass/expected-fail/unsupported metadata.
+- YAML Test Suite fetch/classification harness with executable `pass` cases,
+  event checks, JSON/value checks, and tracked pass/expected-fail/unsupported
+  metadata.
 
 Not implemented yet:
 
@@ -176,6 +176,9 @@ The executable is `lean-yaml`:
 ```bash
 lake exe lean-yaml parse config.yaml
 lake exe lean-yaml value config.yaml
+lake exe lean-yaml json config.yaml
+lake exe lean-yaml events config.yaml
+lake exe lean-yaml suite-events config.yaml
 lake exe lean-yaml roundtrip config.yaml
 lake exe lean-yaml emit-value config.yaml
 ```
@@ -184,6 +187,9 @@ Commands:
 
 - `parse`: parse YAML and print the rich `YamlStream` representation.
 - `value`: parse, compose, resolve with the Core schema, and print `YamlValue`.
+- `json`: parse to `YamlValue` and print compact JSON-compatible output.
+- `events`: parse and print diagnostic `YamlEvent` output.
+- `suite-events`: parse and print YAML Test Suite-compatible event output.
 - `roundtrip`: parse and emit the AST.
 - `emit-value`: parse to `YamlValue` and emit normalized YAML.
 
@@ -203,6 +209,9 @@ YAML
 
 lake exe lean-yaml parse /tmp/config.yaml
 lake exe lean-yaml value /tmp/config.yaml
+lake exe lean-yaml json /tmp/config.yaml
+lake exe lean-yaml events /tmp/config.yaml
+lake exe lean-yaml suite-events /tmp/config.yaml
 lake exe lean-yaml roundtrip /tmp/config.yaml
 lake exe lean-yaml emit-value /tmp/config.yaml
 ```
@@ -223,8 +232,9 @@ lake exe yamlTest
 ```
 
 Run the YAML Test Suite harness. This fetches the pinned upstream suite into
-`build/yaml-test-suite`, executes cases marked `pass`, enforces cases marked
-`expectedFail`, and ignores cases marked `unsupported`:
+`build/yaml-test-suite`, executes cases marked `pass`, compares expected events
+and JSON output when available, enforces cases marked `expectedFail`, and
+ignores cases marked `unsupported`:
 
 ```bash
 bash scripts/yaml-test-suite.sh
@@ -245,6 +255,9 @@ tmp=/tmp/lean-yaml-smoke.yaml
 printf '%s\n' '---' 'name: lean-yaml' 'enabled: true' 'ports:' '  - 80' '  - 443' > "$tmp"
 lake exe lean-yaml parse "$tmp"
 lake exe lean-yaml value "$tmp"
+lake exe lean-yaml json "$tmp"
+lake exe lean-yaml events "$tmp"
+lake exe lean-yaml suite-events "$tmp"
 lake exe lean-yaml roundtrip "$tmp"
 lake exe lean-yaml emit-value "$tmp"
 ```
@@ -306,6 +319,7 @@ Yaml.eventsOfStream : Yaml.YamlStream -> Array Yaml.YamlEvent
 Yaml.eventsOfDocument : Yaml.YamlDocument -> Array Yaml.YamlEvent
 Yaml.emitEvents : Array Yaml.YamlEvent -> String
 Yaml.emitStreamEvents : Yaml.YamlStream -> String
+Yaml.emitSuiteEvents : Yaml.YamlStream -> String
 ```
 
 Serde:
@@ -316,6 +330,7 @@ Yaml.fromYaml : Yaml.YamlValue -> Except Yaml.FromYamlError α
 Yaml.fromMapField : Array (Yaml.YamlValue × Yaml.YamlValue) -> String -> Except Yaml.FromYamlError α
 Yaml.withTag : String -> Yaml.YamlValue -> Yaml.YamlValue
 Yaml.fromTagged : String -> Yaml.YamlValue -> Except Yaml.FromYamlError α
+Yaml.YamlValue.toJsonString? : Yaml.YamlValue -> Except String String
 ```
 
 ## Repository Standards
@@ -389,8 +404,9 @@ To complete the project as specified, the main work is:
   representation-graph composition beyond the current alias-expansion subset.
 - Add serde deriving macros for structures and simple inductives, then integrate
   custom tag handling into deriving.
-- Broaden the official YAML Test Suite classification list and validate
-  expected events/values, not just parser success or failure.
+- Broaden the official YAML Test Suite classification list, add round-trip and
+  invalid-case validations, and drive YAML 1.2.2 `expectedFail` cases toward
+  zero.
 - Replace current IO wrappers with true incremental parser/emitter APIs, add
   large-file fixtures, benchmarks, throughput tracking, and only then consider
   optional FFI acceleration.

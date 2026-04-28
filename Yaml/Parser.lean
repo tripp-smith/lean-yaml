@@ -100,7 +100,9 @@ private def unquote (s : String) : String :=
   | _ => s
 
 private def expandTag (directives : Array Directive) (tag : String) : String :=
-  if hasPrefix "!!" tag then
+  if hasPrefix "!<" tag && hasSuffix ">" tag then
+    dropLastChar (dropChars 2 tag)
+  else if hasPrefix "!!" tag then
     "tag:yaml.org,2002:" ++ dropChars 2 tag
   else if hasPrefix "!" tag && tag.length > 1 then
     let rec go (dirs : List Directive) : String :=
@@ -421,18 +423,24 @@ private def numberedLines (input : String) : List (Nat × String) :=
     | n, line :: rest => (n, line) :: go (n + 1) rest
   go 1 rawLines
 
+private def lineWithContent (line : Line) (content : String) : String :=
+  String.ofList (List.replicate line.indent ' ') ++ content
+
 private def splitDocuments (input : String) : Array RawDocument :=
   Id.run do
     let mut docs : Array RawDocument := #[]
     let mut current : RawDocument := {}
     for (n, raw) in numberedLines input do
       let line := mkLine n raw
-      if line.content = "---" then
+      if line.content = "---" || hasPrefix "--- " line.content then
         if rawDocumentHasContent current || current.explicitStart || current.explicitEnd then
           docs := docs.push current
           current := { lines := [], explicitStart := true }
         else
           current := { current with explicitStart := true }
+        let rest := trim (dropChars 3 line.content)
+        if rest ≠ "" then
+          current := { current with lines := current.lines ++ [(n, lineWithContent line rest)] }
       else if line.content = "..." then
         current := { current with explicitEnd := true }
         docs := docs.push current

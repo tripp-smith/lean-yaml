@@ -10,6 +10,11 @@ def testParserAndEmitter : IO Unit := do
   assertTrue "explicit end" doc.explicitEnd
   let multi ← assertOk "multi-doc stream" (Yaml.parse "---\na: 1\n---\nb: 2\n")
   assertTrue "multi-doc count" (multi.documents.size = 2)
+  let sameLine ← assertOk "same-line document start" (Yaml.parseDocument "%YAML 1.2\n--- text\n")
+  assertTrue "same-line document start explicit" sameLine.explicitStart
+  match sameLine.root with
+  | .scalar "text" .plain _ _ _ => pure ()
+  | other => throw (IO.userError s!"same-line document start: unexpected root {repr other}")
   let bytes := "\uFEFFname: lean\n".toUTF8
   let _ ← assertOk "parse byte array with BOM" (Yaml.parseByteArray bytes)
   pure ()
@@ -88,9 +93,20 @@ def testLexerTokensAndDiagnostics : IO Unit := do
   | .ok _ => throw (IO.userError "invalid directive: expected parse error")
   | .error err => assertTrue "invalid directive kind" (err.kind = .invalidDirective)
 
+def testSuiteEventsAndJson : IO Unit := do
+  let stream ← assertOk "suite event parse" (Yaml.parse "---\n- !<tag:yaml.org,2002:int> 1\n- two\n")
+  assertEqString "suite events"
+    "+STR\n+DOC ---\n+SEQ\n=VAL <tag:yaml.org,2002:int> :1\n=VAL :two\n-SEQ\n-DOC\n-STR"
+    (Yaml.emitSuiteEvents stream)
+  let value ← assertOk "json value parse" (Yaml.parseValue "name: lean\nports: [80, 443]\n")
+  match YamlValue.toJsonString? value with
+  | .ok json => assertEqString "json render" "{\"name\":\"lean\",\"ports\":[80,443]}" json
+  | .error err => throw (IO.userError s!"json render failed: {err}")
+
 def testParserSuite : IO Unit := do
   testParserAndEmitter
   testScalarsAndFlow
   testRoundTripMetadata
   testTagHandlesAndComplexKeys
   testLexerTokensAndDiagnostics
+  testSuiteEventsAndJson

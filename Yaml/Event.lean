@@ -79,6 +79,27 @@ def renderEvent : YamlEvent → String
 def renderEvents (events : Array YamlEvent) : String :=
   String.intercalate "\n" (events.toList.map renderEvent)
 
+private def suitePropsText (props : NodeProperties) : String :=
+  match props.tag with
+  | some tag => s!" <{tag}>"
+  | none => ""
+
+def renderSuiteEvent? : YamlEvent → Option String
+  | .streamStart => some "+STR"
+  | .streamEnd => some "-STR"
+  | .documentStart _ explicit => some (if explicit then "+DOC ---" else "+DOC")
+  | .documentEnd explicit => some (if explicit then "-DOC ..." else "-DOC")
+  | .comment _ => none
+  | .scalar value _ props _ _ => some s!"=VAL{suitePropsText props} :{value}"
+  | .sequenceStart _ props => some s!"+SEQ{suitePropsText props}"
+  | .sequenceEnd => some "-SEQ"
+  | .mappingStart _ props => some s!"+MAP{suitePropsText props}"
+  | .mappingEnd => some "-MAP"
+  | .alias name props => some s!"=ALI{suitePropsText props} *{name}"
+
+def renderSuiteEvents (events : Array YamlEvent) : String :=
+  String.intercalate "\n" (events.toList.filterMap renderSuiteEvent?)
+
 private def propComments (props : NodeProperties) : Array YamlEvent :=
   let detached := props.trivia.detached.map YamlEvent.comment
   let leading := props.trivia.leading.map YamlEvent.comment
@@ -128,5 +149,8 @@ def emitEvents (events : Array YamlEvent) : String :=
 
 def emitStreamEvents (stream : YamlStream) : String :=
   emitEvents (eventsOfStream stream)
+
+def emitSuiteEvents (stream : YamlStream) : String :=
+  Event.renderSuiteEvents (eventsOfStream stream)
 
 end Yaml

@@ -1,0 +1,12 @@
+# YAML Test Suite classification.
+# Columns: case-id<TAB>status<TAB>reason
+# status is one of: pass, expectedFail, unsupported
+#
+# The suite harness starts with no mandatory cases until the parser production
+# rewrite begins importing upstream cases. CI still fetches the upstream suite
+# so changes to the harness and classification format are exercised.
+229Q	pass	current parser accepts nested block sequences/mappings
+27NA	pass	current parser accepts YAML directive and explicit start on one line as a scalar document
+2AUY	pass	current parser accepts basic tagged sequence entries
+2JQS	pass	current parser accepts repeated empty mapping keys in the supported subset
+33X3	pass	current parser accepts explicitly tagged integers in a block sequence

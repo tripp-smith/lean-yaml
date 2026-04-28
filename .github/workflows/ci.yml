@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+      - name: Build
+        run: lake build
+      - name: Unit tests
+        run: lake exe yamlTest
+      - name: Examples
+        run: |
+          lake env lean examples/config.lean
+          lake env lean examples/roundtrip.lean
+          lake env lean examples/serde.lean
+      - name: CLI smoke
+        run: |
+          tmp="$(mktemp)"
+          printf '%s\n' '---' 'name: lean-yaml' 'enabled: true' 'ports:' '  - 80' '  - 443' > "$tmp"
+          lake exe lean-yaml parse "$tmp"
+          lake exe lean-yaml value "$tmp"
+          lake exe lean-yaml roundtrip "$tmp"
+          lake exe lean-yaml emit-value "$tmp"
+      - name: YAML Test Suite harness
+        run: bash scripts/yaml-test-suite.sh

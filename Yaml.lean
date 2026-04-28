@@ -25,6 +25,9 @@ def parseDocument (input : String) : Except ParseError YamlDocument :=
 def parseByteArray (input : ByteArray) : Except ParseError YamlStream :=
   Parser.parseByteArray input
 
+def tokenize (input : String) : Except ParseError Parser.TokenStream :=
+  Parser.lex input
+
 def emit (stream : YamlStream) (opts : EmitOptions := {}) : String :=
   Emitter.emitStream stream opts
 

@@ -1,0 +1,28 @@
+name: Feature request
+description: Propose YAML 1.2.2 support, API improvements, serde behavior, or tooling.
+title: "[feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What use case or YAML behavior should this support?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: Describe the API, behavior, or compliance improvement.
+    validations:
+      required: true
+  - type: input
+    id: spec
+    attributes:
+      label: YAML Spec or Test Suite Reference
+      placeholder: "YAML 1.2.2 section, test case id, or related link"
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional Context

@@ -39,6 +39,9 @@ typechecks, CLI smoke checks, and `bash scripts/yaml-test-suite.sh`:
 
 - Lake package, public library root, CLI executable, examples, and test
   executable.
+- Lake package metadata for Reservoir indexing: version, description, keywords,
+  Apache-2.0 license identifier, and README path.
+- Standard `lake test` driver backed by the `yamlTest` executable.
 - Lean toolchain pinned to `leanprover/lean4:v4.29.1`.
 - `fgdorais/lean4-parser` dependency pinned to commit `66271b6`.
 - Rich AST with source positions/ranges, directives, comments, node trivia,
@@ -54,6 +57,13 @@ typechecks, CLI smoke checks, and `bash scripts/yaml-test-suite.sh`:
   scalars, literal/folded block scalar headers with chomping and indentation
   hints, comments, tag handle expansion for scalar properties, anchors, and
   aliases.
+- Public tokenization API, `Yaml.tokenize`, backed by the parser source/token
+  scaffolding. It records source ranges and YAML contexts for stream/document
+  markers, directives, comments, indentation, anchors, aliases, tags, flow
+  collection markers, mapping separators, scalar lines, and line breaks.
+- Early lexer diagnostics for tab indentation, malformed `%YAML`/`%TAG`
+  directives, unterminated flow collections, unterminated quoted scalars, and
+  invalid double-quoted escape sequences.
 - Composer validation for duplicate anchors and undefined aliases.
 - Representation graph composition API with alias expansion and recursive alias
   diagnostics for the current AST subset.
@@ -74,24 +84,29 @@ typechecks, CLI smoke checks, and `bash scripts/yaml-test-suite.sh`:
 - Event lowering from `YamlStream`/`YamlDocument` to low-level `YamlEvent`
   streams plus a text event emitter for diagnostics and future low-level
   emission work.
-- Parser source-slice, token, and context scaffolding for the planned
-  `lean4-parser` production rewrite.
+- Parser source-slice, token, and context layer for the planned `lean4-parser`
+  production rewrite.
 - CLI commands: `parse`, `value`, `roundtrip`, and `emit-value`.
 - Structured regression tests under `YamlTest.*` for parser/emitter round trips,
   documents, ByteArray BOM handling, block scalars, flow nesting,
   directive/comment/block-scalar metadata emission, tag handle expansion, simple
   complex keys, schema differences, composer errors, representation graph alias
   expansion, event lowering, serde errors, serde helpers, and streaming helpers.
-- CI configuration for build, unit tests, examples, CLI smoke checks, and the
+- GitHub Actions CI using `leanprover/lean-action`, `lake build`, `lake test`,
+  example typechecks, CLI smoke checks, Reservoir eligibility checks, and the
   YAML Test Suite harness.
+- Dependabot configuration for GitHub Actions updates.
+- GitHub community files for contributors: contributing guide, security policy,
+  code of conduct, issue templates, and pull request template.
 - YAML Test Suite fetch/classification harness with executable `pass` cases and
   tracked pass/expected-fail/unsupported metadata.
 
 Not implemented yet:
 
 - Full YAML 1.2.2 grammar and all edge cases.
-- A real `lean4-parser` YAML token/production pipeline; the parser still uses
-  mostly hand-written line-oriented code.
+- A real `lean4-parser` YAML production pipeline; the parser now runs a lexer
+  pre-pass, but AST construction still uses mostly hand-written line-oriented
+  code.
 - Full indentation contexts, all block/flow restrictions, full scalar escaping,
   folding, chomping, and all complex-key forms.
 - Full tag directive semantics and all tag handle edge cases.
@@ -197,6 +212,13 @@ lake exe lean-yaml emit-value /tmp/config.yaml
 Run the current regression suite:
 
 ```bash
+lake test
+```
+
+The test driver is the `yamlTest` executable, so this direct command is
+equivalent:
+
+```bash
 lake exe yamlTest
 ```
 
@@ -212,7 +234,7 @@ Before submitting changes, run:
 
 ```bash
 lake build
-lake exe yamlTest
+lake test
 bash scripts/yaml-test-suite.sh
 ```
 
@@ -252,6 +274,7 @@ Yaml.parse : String -> Except Yaml.ParseError Yaml.YamlStream
 Yaml.parseDocument : String -> Except Yaml.ParseError Yaml.YamlDocument
 Yaml.parseByteArray : ByteArray -> Except Yaml.ParseError Yaml.YamlStream
 Yaml.parseValue : String -> Yaml.Schema -> Except Yaml.ParseError Yaml.YamlValue
+Yaml.tokenize : String -> Except Yaml.ParseError Yaml.Parser.TokenStream
 
 Yaml.compose : Yaml.YamlStream -> Except Yaml.ComposeError Yaml.YamlStream
 Yaml.composeGraph : Yaml.YamlStream -> Except Yaml.ComposeError Yaml.RepresentationStream
@@ -295,6 +318,34 @@ Yaml.withTag : String -> Yaml.YamlValue -> Yaml.YamlValue
 Yaml.fromTagged : String -> Yaml.YamlValue -> Except Yaml.FromYamlError α
 ```
 
+## Repository Standards
+
+The repository follows the standard Lean 4/Lake layout:
+
+- `lakefile.lean` at the repository root defines the package, library,
+  executable, test driver, dependencies, and Reservoir metadata.
+- `lean-toolchain` pins the Lean toolchain used by `elan`, Lake, editors, and
+  CI.
+- `lake-manifest.json` is committed so dependency revisions are reproducible.
+- `Yaml.lean` is the public library root; implementation modules live under
+  `Yaml/`.
+- `Test.lean` and `YamlTest/` provide the Lake test driver.
+- `.lake/`, `build/`, generated Lean artifacts, editor files, logs, and local
+  environment files are ignored by Git.
+- `.github/workflows/ci.yml` runs the standard Lean action plus project-specific
+  examples, CLI smoke tests, and YAML Test Suite checks.
+- `.github/dependabot.yml` keeps GitHub Actions dependencies current.
+- `CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md`,
+  `.github/ISSUE_TEMPLATE/`, and `.github/pull_request_template.md` provide the
+  standard GitHub community profile files for public collaboration.
+- `LICENSE` contains the Apache-2.0 license text referenced by Lake metadata.
+
+## Contributing And Security
+
+Contribution instructions are in `CONTRIBUTING.md`. Security reporting
+instructions are in `SECURITY.md`. Project conduct expectations are in
+`CODE_OF_CONDUCT.md`.
+
 ## Module Layout
 
 - `Yaml.lean`: public API re-exports and convenience functions.
@@ -305,7 +356,8 @@ Yaml.fromTagged : String -> Yaml.YamlValue -> Except Yaml.FromYamlError α
 - `Yaml/Graph.lean`: representation graph composition and alias expansion.
 - `Yaml/Parser.lean`: current parser and parse-to-value entry points.
 - `Yaml/Parser/Source.lean`: source buffer and source-slice scaffolding.
-- `Yaml/Parser/Token.lean`: token and YAML context scaffolding.
+- `Yaml/Parser/Token.lean`: tokenization, source ranges, lexer diagnostics, and
+  YAML context tracking.
 - `Yaml/Composer.lean`: anchor/alias validation.
 - `Yaml/Schema.lean`: Failsafe, JSON, and Core schema resolution.
 - `Yaml/Emitter.lean`: AST and value emission.

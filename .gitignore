@@ -22,3 +22,4 @@ build/
 # Environment files
 .env
 .env.*
+.codex.session

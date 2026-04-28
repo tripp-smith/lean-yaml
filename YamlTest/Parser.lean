@@ -59,8 +59,38 @@ def testTagHandlesAndComplexKeys : IO Unit := do
       | key, val => throw (IO.userError s!"complex key: unexpected {repr key} / {repr val}")
   | other => throw (IO.userError s!"complex key: unexpected root {repr other}")
 
+private def countTokens (kind : Yaml.Parser.TokenKind) (tokens : Array Yaml.Parser.Token) : Nat :=
+  tokens.foldl (init := 0) fun count token =>
+    if token.kind = kind then count + 1 else count
+
+def testLexerTokensAndDiagnostics : IO Unit := do
+  let stream ← assertOk "lexer token stream" (Yaml.tokenize "%YAML 1.2\n---\n&a [1, *a, !<tag:example.com,2026:x> y]\n")
+  assertTrue "lexer has stream start" (stream.tokens[0]!.kind = .streamStart)
+  assertTrue "lexer directive token" (countTokens .directive stream.tokens = 1)
+  assertTrue "lexer document start token" (countTokens .documentStart stream.tokens = 1)
+  assertTrue "lexer anchor token" (countTokens .anchor stream.tokens = 1)
+  assertTrue "lexer alias token" (countTokens .alias stream.tokens = 1)
+  assertTrue "lexer tag token" (countTokens .tag stream.tokens = 1)
+  assertTrue "lexer flow start token" (countTokens .flowSequenceStart stream.tokens = 1)
+  assertTrue "lexer flow end token" (countTokens .flowSequenceEnd stream.tokens = 1)
+  match Yaml.parse "a: [1, 2\n" with
+  | .ok _ => throw (IO.userError "unterminated flow collection: expected parse error")
+  | .error err =>
+      assertTrue "unterminated flow kind" (err.kind = .unexpectedEnd)
+      assertTrue "unterminated flow context" (err.context.contains "flow")
+  match Yaml.parse "a: \"bad \\q escape\"\n" with
+  | .ok _ => throw (IO.userError "invalid escape: expected parse error")
+  | .error err => assertTrue "invalid escape kind" (err.kind = .invalidScalar)
+  match Yaml.parse "\tname: value\n" with
+  | .ok _ => throw (IO.userError "tab indentation: expected parse error")
+  | .error err => assertTrue "tab indentation kind" (err.kind = .invalidIndentation)
+  match Yaml.parse "%YAML\n---\na: 1\n" with
+  | .ok _ => throw (IO.userError "invalid directive: expected parse error")
+  | .error err => assertTrue "invalid directive kind" (err.kind = .invalidDirective)
+
 def testParserSuite : IO Unit := do
   testParserAndEmitter
   testScalarsAndFlow
   testRoundTripMetadata
   testTagHandlesAndComplexKeys
+  testLexerTokensAndDiagnostics

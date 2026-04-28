@@ -2,6 +2,7 @@ import Parser
 import Yaml.AST
 import Yaml.Composer
 import Yaml.Error
+import Yaml.Parser.Token
 import Yaml.Schema
 import Yaml.Types
 
@@ -460,6 +461,7 @@ private def encodingError (message : String) : ParseError :=
 
 def parse (input : String) : Except ParseError YamlStream := do
   let input := stripUtf8Bom input
+  let _ ← Token.lex input
   let docs ← (splitDocuments input).mapM parseRawDocument
   return { documents := docs }
 

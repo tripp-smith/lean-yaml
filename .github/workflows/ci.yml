@@ -2,7 +2,10 @@ name: CI
 
 on:
   push:
+    branches: ["main"]
   pull_request:
+    branches: ["main"]
+  workflow_dispatch:
 
 jobs:
   build-test:
@@ -10,10 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: leanprover/lean-action@v1
-      - name: Build
-        run: lake build
-      - name: Unit tests
-        run: lake exe yamlTest
+        with:
+          build: true
+          test: true
+          check-reservoir-eligibility: true
       - name: Examples
         run: |
           lake env lean examples/config.lean

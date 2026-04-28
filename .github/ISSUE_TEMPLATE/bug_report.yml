@@ -1,0 +1,32 @@
+name: Bug report
+description: Report incorrect YAML parsing, emitting, schema resolution, serde, or CLI behavior.
+title: "[bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened, and what did you expect instead?
+    validations:
+      required: true
+  - type: textarea
+    id: input
+    attributes:
+      label: Minimal YAML or Lean Reproduction
+      render: yaml
+  - type: textarea
+    id: commands
+    attributes:
+      label: Commands Run
+      description: Include `lake build`, `lake test`, CLI commands, or a small Lean snippet.
+      render: bash
+  - type: input
+    id: toolchain
+    attributes:
+      label: Lean Toolchain
+      placeholder: leanprover/lean4:v4.29.1
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional Context

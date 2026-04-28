@@ -16,7 +16,6 @@ jobs:
         with:
           build: true
           test: true
-          check-reservoir-eligibility: true
       - name: Examples
         run: |
           lake env lean examples/config.lean

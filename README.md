@@ -97,9 +97,10 @@ typechecks, CLI smoke checks, and `bash scripts/yaml-test-suite.sh`:
 - Dependabot configuration for GitHub Actions updates.
 - GitHub community files for contributors: contributing guide, security policy,
   code of conduct, issue templates, and pull request template.
-- YAML Test Suite fetch/classification harness with executable `pass` cases,
-  event checks, JSON/value checks, and tracked pass/expected-fail/unsupported
-  metadata.
+- YAML Test Suite fetch/classification harness with all 402 pinned `in.yaml`
+  fixtures classified: 88 `pass`, 314 `expectedFail`, and 0 `unsupported`.
+  Passing cases enforce parse behavior, event checks, and JSON/value checks
+  where upstream expectations exist.
 
 Not implemented yet:
 
@@ -232,9 +233,10 @@ lake exe yamlTest
 ```
 
 Run the YAML Test Suite harness. This fetches the pinned upstream suite into
-`build/yaml-test-suite`, executes cases marked `pass`, compares expected events
-and JSON output when available, enforces cases marked `expectedFail`, and
-ignores cases marked `unsupported`:
+`build/yaml-test-suite`, requires every upstream `in.yaml` fixture to be
+classified, executes cases marked `pass`, compares expected events and JSON
+output when available, enforces cases marked `expectedFail`, and ignores cases
+marked `unsupported`:
 
 ```bash
 bash scripts/yaml-test-suite.sh
@@ -381,8 +383,8 @@ instructions are in `SECURITY.md`. Project conduct expectations are in
 - `Test.lean` and `YamlTest/`: structured regression test executable.
 - `.github/workflows/ci.yml`: CI for build, tests, examples, CLI smoke checks,
   and YAML Test Suite harness.
-- `scripts/yaml-test-suite.sh`: fetches the official YAML Test Suite and reports
-  tracked classification counts.
+- `scripts/yaml-test-suite.sh`: fetches the official YAML Test Suite, enforces
+  complete classification coverage, and reports tracked classification counts.
 - `suite/yaml-test-suite/classification.tsv`: pass/expected-fail/unsupported
   classification metadata.
 - `examples/`: runnable examples.
